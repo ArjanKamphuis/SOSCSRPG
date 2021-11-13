@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Engine.Factories
 {
-    public static class ItemFactory
+    internal static class ItemFactory
     {
         private static readonly List<GameItem> _standardGameItems = new List<GameItem>();
 
@@ -12,11 +12,13 @@ namespace Engine.Factories
         {
             _standardGameItems.Add(new Weapon(1001, "Pointy Stick", 1, 1, 2));
             _standardGameItems.Add(new Weapon(1002, "Rusty Sword", 5, 1, 3));
+            _standardGameItems.Add(new GameItem(9001, "Snake fang", 1));
+            _standardGameItems.Add(new GameItem(9002, "Snakeskin", 2));
         }
 
-        public static GameItem CreateGameItem(int itemTypeId)
+        internal static GameItem CreateGameItem(int itemTypeId)
         {
-            return _standardGameItems.FirstOrDefault(item => item.ItemTypeId == itemTypeId)?.Clone();
+            return _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId)?.Clone();
         }
     }
 }
