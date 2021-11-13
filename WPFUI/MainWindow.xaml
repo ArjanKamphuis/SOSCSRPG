@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:WPFUI"
         mc:Ignorable="d"        
         Title="Scott's Awesome Game" Height="768" Width="1024" FontSize="11pt" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -46,7 +51,6 @@
             <Label Grid.Row="4" Grid.Column="1" Content="{Binding CurrentPlayer.ExperiencePoints}"/>
             <Label Grid.Row="5" Grid.Column="0" Content="Level:"/>
             <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentPlayer.Level}"/>
-            <Button Grid.Row="6" Grid.Column="1" Content="Add XP" Click="ButtonBase_OnClick"/>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1" Background="Beige">
@@ -75,6 +79,33 @@
         </Grid>
         
         <Label Grid.Row="2" Grid.Column="0" Content="Inventory/Quests" Background="BurlyWood"/>
-        <Label Grid.Row="2" Grid.Column="1" Content="Combat/Movement Controls" Background="Lavender"/>
+        
+        <Grid Grid.Row="2" Grid.Column="1" Background="Lavender">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="255"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="1" Height="25" Width="65" Margin="10" Content="North" Visibility="{Binding HasLocationToNorth, Converter={StaticResource BooleanToVisibility}}" Click="OnClick_MoveNorth"/>
+                <Button Grid.Row="1" Grid.Column="0" Height="25" Width="65" Margin="10" Content="West" Visibility="{Binding HasLocationToWest, Converter={StaticResource BooleanToVisibility}}" Click="OnClick_MoveWest"/>
+                <Button Grid.Row="1" Grid.Column="2" Height="25" Width="65" Margin="10" Content="East" Visibility="{Binding HasLocationToEast, Converter={StaticResource BooleanToVisibility}}" Click="OnClick_MoveEast"/>
+                <Button Grid.Row="2" Grid.Column="1" Height="25" Width="65" Margin="10" Content="South" Visibility="{Binding HasLocationToSouth, Converter={StaticResource BooleanToVisibility}}" Click="OnClick_MoveSouth"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
