@@ -15,6 +15,9 @@
     <Resource Include="Images\Locations\TownGate.png" />
     <Resource Include="Images\Locations\TownSquare.png" />
     <Resource Include="Images\Locations\Trader.png" />
+    <Resource Include="Images\Monsters\GiantSpider.png" />
+    <Resource Include="Images\Monsters\Rat.png" />
+    <Resource Include="Images\Monsters\Snake.png" />
   </ItemGroup>
 
 </Project>
