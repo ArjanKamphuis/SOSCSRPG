@@ -6,18 +6,42 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Locations\FarmFields.png" />
-    <Resource Include="Images\Locations\Farmhouse.png" />
-    <Resource Include="Images\Locations\HerbalistsGarden.png" />
-    <Resource Include="Images\Locations\HerbalistsHut.png" />
-    <Resource Include="Images\Locations\Home.png" />
-    <Resource Include="Images\Locations\SpiderForest.png" />
-    <Resource Include="Images\Locations\TownGate.png" />
-    <Resource Include="Images\Locations\TownSquare.png" />
-    <Resource Include="Images\Locations\Trader.png" />
-    <Resource Include="Images\Monsters\GiantSpider.png" />
-    <Resource Include="Images\Monsters\Rat.png" />
-    <Resource Include="Images\Monsters\Snake.png" />
+    <Resource Include="Images\Locations\FarmFields.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\Farmhouse.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\HerbalistsGarden.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\HerbalistsHut.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\Home.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\SpiderForest.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\TownGate.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\TownSquare.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\Trader.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\GiantSpider.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Rat.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Snake.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
