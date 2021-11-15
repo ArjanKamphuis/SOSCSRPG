@@ -23,30 +23,32 @@
         <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="Your Inventory"/>
         <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Content="Trader's Inventory"/>
 
-        <DataGrid Grid.Row="2" Grid.Column="0" Margin="10" ItemsSource="{Binding CurrentPlayer.Inventory}" AutoGenerateColumns="False" HeadersVisibility="Column" VerticalScrollBarVisibility="Auto"
+        <DataGrid Grid.Row="2" Grid.Column="0" Margin="10" ItemsSource="{Binding CurrentPlayer.GroupedInventory}" AutoGenerateColumns="False" HeadersVisibility="Column" VerticalScrollBarVisibility="Auto"
                   CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Description" IsReadOnly="True" Width="*" Binding="{Binding Path=Name}"/>
-                <DataGridTextColumn Header="Price" IsReadOnly="True" Width="Auto" Binding="{Binding Path=Price}"/>
+                <DataGridTextColumn Header="Description" IsReadOnly="True" Width="*" Binding="{Binding Item.Name}"/>
+                <DataGridTextColumn Header="Qty" IsReadOnly="True" Width="Auto" Binding="{Binding Quantity}"/>
+                <DataGridTextColumn Header="Price" IsReadOnly="True" Width="Auto" Binding="{Binding Item.Price}"/>
                 <DataGridTemplateColumn MinWidth="75">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="OnClick_Sell" Width="55" Content="Sell"/>
+                            <Button Click="OnClick_Sell" Width="55" Content="Sell 1"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
-        <DataGrid Grid.Row="2" Grid.Column="1" Margin="10" ItemsSource="{Binding CurrentTrader.Inventory}" AutoGenerateColumns="False" HeadersVisibility="Column" VerticalScrollBarVisibility="Auto"
+        <DataGrid Grid.Row="2" Grid.Column="1" Margin="10" ItemsSource="{Binding CurrentTrader.GroupedInventory}" AutoGenerateColumns="False" HeadersVisibility="Column" VerticalScrollBarVisibility="Auto"
                   CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Description" IsReadOnly="True" Width="*" Binding="{Binding Path=Name}"/>
-                <DataGridTextColumn Header="Price" IsReadOnly="True" Width="Auto" Binding="{Binding Path=Price}"/>
+                <DataGridTextColumn Header="Description" IsReadOnly="True" Width="*" Binding="{Binding Item.Name}"/>
+                <DataGridTextColumn Header="Qty" IsReadOnly="True" Width="Auto" Binding="{Binding Quantity}"/>
+                <DataGridTextColumn Header="Price" IsReadOnly="True" Width="Auto" Binding="{Binding Item.Price}"/>
                 <DataGridTemplateColumn MinWidth="75">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="OnClick_Buy" Width="55" Content="Buy"/>
+                            <Button Click="OnClick_Buy" Width="55" Content="Buy 1"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

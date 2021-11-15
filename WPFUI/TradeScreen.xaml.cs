@@ -18,27 +18,27 @@ namespace WPFUI
 
         private void OnClick_Sell(object sender, RoutedEventArgs e)
         {
-            if (((FrameworkElement)sender).DataContext is GameItem item)
+            if (((FrameworkElement)sender).DataContext is GroupedInventoryItem groupedInventoryItem)
             {
-                Session.CurrentPlayer.Gold += item.Price;
-                Session.CurrentTrader.AddItemToInventory(item);
-                Session.CurrentPlayer.RemoveItemFromInventory(item);
+                Session.CurrentPlayer.Gold += groupedInventoryItem.Item.Price;
+                Session.CurrentTrader.AddItemToInventory(groupedInventoryItem.Item);
+                Session.CurrentPlayer.RemoveItemFromInventory(groupedInventoryItem.Item);
             }
         }
 
         private void OnClick_Buy(object sender, RoutedEventArgs e)
         {
-            if (((FrameworkElement)sender).DataContext is GameItem item)
+            if (((FrameworkElement)sender).DataContext is GroupedInventoryItem groupedInventoryItem)
             {
-                if (Session.CurrentPlayer.Gold >= item.Price)
+                if (Session.CurrentPlayer.Gold >= groupedInventoryItem.Item.Price)
                 {
-                    Session.CurrentPlayer.Gold -= item.Price;
-                    Session.CurrentTrader.RemoveItemFromInventory(item);
-                    Session.CurrentPlayer.AddItemToInventory(item);
+                    Session.CurrentPlayer.Gold -= groupedInventoryItem.Item.Price;
+                    Session.CurrentTrader.RemoveItemFromInventory(groupedInventoryItem.Item);
+                    Session.CurrentPlayer.AddItemToInventory(groupedInventoryItem.Item);
                 }
                 else
                 {
-                    _ = MessageBox.Show("You do not have enough gold", "Something went wrong...", MessageBoxButton.OK, MessageBoxImage.Hand);
+                    _ = MessageBox.Show("You do not have enough gold.", "Sorry...", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
