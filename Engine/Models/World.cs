@@ -15,7 +15,7 @@ namespace Engine.Models
                 YCoordinate = yCoordinate,
                 Name = name,
                 Description = description,
-                ImageName = imageName
+                ImageName = $"pack://application:,,,/Engine;component/Images/Locations/{imageName}"
             });
         }
 
