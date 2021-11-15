@@ -6,29 +6,33 @@ namespace Engine.Models
     {
         private int _hitPoints;
 
-        public string Name { get; private set; }
-        public string ImageName { get; private set; }
-        public int MaximumHitPoints { get; private set; }
+        public string Name { get; }
+        public string ImageName { get; }
+        public int MaximumHitPoints { get; }
         public int HitPoints
         {
             get => _hitPoints;
-            private set
+            set
             {
                 _hitPoints = value;
                 OnPropertyChanged();
             }
         }
-        public int RewardExperiencePoints { get; private set; }
-        public int RewardGold { get; private set; }
+        public int MinimumDage { get; }
+        public int MaximumDamage { get; }
+        public int RewardExperiencePoints { get; }
+        public int RewardGold { get; }
 
-        public ObservableCollection<ItemQuantity> Inventory { get; private set; } = new ObservableCollection<ItemQuantity>();
+        public ObservableCollection<ItemQuantity> Inventory { get; } = new ObservableCollection<ItemQuantity>();
 
-        public Monster(string name, string imageName, int maximumHitPoints, int hitPoints, int rewardExperiencePoints, int rewardGold)
+        public Monster(string name, string imageName, int maximumHitPoints, int hitPoints, int minimumDamage, int maximumDamage, int rewardExperiencePoints, int rewardGold)
         {
             Name = name;
             ImageName = $"pack://application:,,,/Engine;component/Images/Monsters/{imageName}";
             MaximumHitPoints = maximumHitPoints;
             HitPoints = hitPoints;
+            MinimumDage = minimumDamage;
+            MaximumDamage = maximumDamage;
             RewardExperiencePoints = rewardExperiencePoints;
             RewardGold = rewardGold;
         }

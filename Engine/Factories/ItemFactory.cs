@@ -22,7 +22,8 @@ namespace Engine.Factories
 
         internal static GameItem CreateGameItem(int itemTypeId)
         {
-            return _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId)?.Clone();
+            GameItem standardItem = _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId);
+            return standardItem != null ? standardItem is Weapon weapon ? weapon.Clone() : standardItem.Clone() : null;
         }
     }
 }
