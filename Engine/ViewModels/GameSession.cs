@@ -17,7 +17,7 @@ namespace Engine.ViewModels
         private Monster _currentMonster;
         private Trader _currentTrader;
 
-        public World CurrentWorld { get; set; }
+        public World CurrentWorld { get; }
         public Weapon CurrentWeapon { get; set; }
         public Player CurrentPlayer
         {
