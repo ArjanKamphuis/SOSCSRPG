@@ -18,7 +18,6 @@ namespace Engine.ViewModels
         private Trader _currentTrader;
 
         public World CurrentWorld { get; }
-        public GameItem CurrentWeapon { get; set; }
         public Player CurrentPlayer
         {
             get => _currentPlayer;
@@ -28,12 +27,14 @@ namespace Engine.ViewModels
                 {
                     _currentPlayer.OnKilled -= OnCurrentPlayerKilled;
                     _currentPlayer.OnLeveledUp -= OnCurrentPlayerLeveledUp;
+                    _currentPlayer.OnActionPerformed -= OnCurrentPlayerPerformedAction;
                 }
                 _currentPlayer = value;
                 if (_currentPlayer != null)
                 {
                     _currentPlayer.OnKilled += OnCurrentPlayerKilled;
                     _currentPlayer.OnLeveledUp += OnCurrentPlayerLeveledUp;
+                    _currentPlayer.OnActionPerformed += OnCurrentPlayerPerformedAction;
                 }
             }
         }
@@ -202,22 +203,13 @@ namespace Engine.ViewModels
 
         public void AttackCurrentMonster()
         {
-            if (CurrentWeapon == null)
+            if (CurrentPlayer.CurrentWeapon == null)
             {
                 RaiseMessage("You must select a weapon, to attack.");
                 return;
             }
 
-            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentWeapon.MinimumDamage, CurrentWeapon.MaximumDamage);
-            if (damageToMonster == 0)
-            {
-                RaiseMessage($"You missed the {CurrentMonster.Name}.");
-            }
-            else
-            {
-                RaiseMessage($"You hit the {CurrentMonster.Name} for {damageToMonster} points.");
-                CurrentMonster.TakeDamage(damageToMonster);
-            }
+            CurrentPlayer.UseCurrentWeaponOn(CurrentMonster);
 
             if (CurrentMonster.IsDead)
             {
@@ -267,6 +259,11 @@ namespace Engine.ViewModels
         private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs e)
         {
             RaiseMessage($"You are now level {CurrentPlayer.Level}!");
+        }
+
+        private void OnCurrentPlayerPerformedAction(object sender, string result)
+        {
+            RaiseMessage(result);
         }
 
         private void RaiseMessage(string message)
