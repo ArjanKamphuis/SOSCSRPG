@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace Engine.Models
         public string Name
         {
             get => _name;
-            set
+            private set
             {
                 _name = value;
                 OnPropertyChanged();
@@ -25,7 +26,7 @@ namespace Engine.Models
         public int CurrentHitPoints
         {
             get => _currentHitPoints;
-            set
+            private set
             {
                 _currentHitPoints = value;
                 OnPropertyChanged();
@@ -34,7 +35,7 @@ namespace Engine.Models
         public int MaximumHitPoints
         {
             get => _maximumHitPoints;
-            set
+            private set
             {
                 _maximumHitPoints = value;
                 OnPropertyChanged();
@@ -43,12 +44,14 @@ namespace Engine.Models
         public int Gold
         {
             get => _gold;
-            set
+            private set
             {
                 _gold = value;
                 OnPropertyChanged();
             }
         }
+
+        public bool IsDead => CurrentHitPoints <= 0;
 
         public ObservableCollection<GameItem> Inventory { get; } = new ObservableCollection<GameItem>();
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; } = new ObservableCollection<GroupedInventoryItem>();
@@ -56,6 +59,16 @@ namespace Engine.Models
         public List<GameItem> Weapons => Inventory.Where(i => i is Weapon).ToList();
 
         #endregion
+
+        public EventHandler OnKilled;
+
+        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, int gold)
+        {
+            Name = name;
+            MaximumHitPoints = maximumHitPoints;
+            CurrentHitPoints = currentHitPoints;
+            Gold = gold;
+        }
 
         public void AddItemToInventory(GameItem item)
         {
@@ -79,7 +92,6 @@ namespace Engine.Models
                 }
             }
         }
-
         public void RemoveItemFromInventory(GameItem item)
         {
             _ = Inventory.Remove(item);
@@ -90,7 +102,7 @@ namespace Engine.Models
             {
                 if (groupedInventoryItemToRemove.Quantity == 1)
                 {
-                    GroupedInventory.Remove(groupedInventoryItemToRemove);
+                    _ = GroupedInventory.Remove(groupedInventoryItemToRemove);
                 }
                 else
                 {
@@ -98,5 +110,45 @@ namespace Engine.Models
                 }
             }
         }
+
+        public void TakeDamage(int hitPointsOfDamage)
+        {
+            CurrentHitPoints -= hitPointsOfDamage;
+            if (IsDead)
+            {
+                CurrentHitPoints = 0;
+                RaiseOnKilledEvent();
+            }
+        }
+        public void Heal(int hitPointsToHeal)
+        {
+            CurrentHitPoints = Math.Min(CurrentHitPoints + hitPointsToHeal, MaximumHitPoints);
+        }
+        public void CompletelyHeal()
+        {
+            CurrentHitPoints = MaximumHitPoints;
+        }
+
+        public void ReceiveGold(int amountOfGold)
+        {
+            Gold += amountOfGold;
+        }
+        public void SpendGold(int amountOfGold)
+        {
+            if (amountOfGold > Gold)
+            {
+                throw new ArgumentOutOfRangeException($"{Name} only has {Gold} gold, and cannot spend {amountOfGold} gold");
+            }
+            Gold -= amountOfGold;
+        }
+
+        #region Private function
+
+        private void RaiseOnKilledEvent()
+        {
+            OnKilled?.Invoke(this, new System.EventArgs());
+        }
+
+        #endregion
     }
 }
