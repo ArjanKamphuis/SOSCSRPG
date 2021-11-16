@@ -97,7 +97,10 @@ namespace Engine.Models
             _ = Inventory.Remove(item);
             OnPropertyChanged(nameof(Weapons));
 
-            GroupedInventoryItem groupedInventoryItemToRemove = GroupedInventory.SingleOrDefault(gi => gi.Item == item);
+            GroupedInventoryItem groupedInventoryItemToRemove = item.IsUnique
+                ? GroupedInventory.SingleOrDefault(gi => gi.Item == item)
+                : GroupedInventory.SingleOrDefault(gi => gi.Item.ItemTypeId == item.ItemTypeId);
+
             if (groupedInventoryItemToRemove != null)
             {
                 if (groupedInventoryItemToRemove.Quantity == 1)
