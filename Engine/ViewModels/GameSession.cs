@@ -18,7 +18,7 @@ namespace Engine.ViewModels
         private Trader _currentTrader;
 
         public World CurrentWorld { get; }
-        public Weapon CurrentWeapon { get; set; }
+        public GameItem CurrentWeapon { get; set; }
         public Player CurrentPlayer
         {
             get => _currentPlayer;

@@ -10,20 +10,28 @@ namespace Engine.Factories
 
         static ItemFactory()
         {
-            _standardGameItems.Add(new Weapon(1001, "Pointy Stick", 1, 1, 2));
-            _standardGameItems.Add(new Weapon(1002, "Rusty Sword", 5, 1, 3));
-            _standardGameItems.Add(new GameItem(9001, "Snake fang", 1));
-            _standardGameItems.Add(new GameItem(9002, "Snakeskin", 2));
-            _standardGameItems.Add(new GameItem(9003, "Rat tail", 1));
-            _standardGameItems.Add(new GameItem(9004, "Rat fur", 2));
-            _standardGameItems.Add(new GameItem(9005, "Spider fang", 1));
-            _standardGameItems.Add(new GameItem(9006, "Spiders silk", 2));
+            BuildWeapon(1001, "Pointy Stick", 1, 1, 2);
+            BuildWeapon(1002, "Rusty Sword", 5, 1, 3);
+            BuildMiscellaneousItem(9001, "Snake fang", 1);
+            BuildMiscellaneousItem(9002, "Snakeskin", 2);
+            BuildMiscellaneousItem(9003, "Rat tail", 1);
+            BuildMiscellaneousItem(9004, "Rat fur", 2);
+            BuildMiscellaneousItem(9005, "Spider fang", 1);
+            BuildMiscellaneousItem(9006, "Spiders silk", 2);
         }
 
         internal static GameItem CreateGameItem(int itemTypeId)
         {
-            GameItem standardItem = _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId);
-            return standardItem != null ? standardItem is Weapon weapon ? weapon.Clone() : standardItem.Clone() : null;
+            return _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId)?.Clone();
+        }
+
+        private static void BuildMiscellaneousItem(int id, string name, int price)
+        {
+            _standardGameItems.Add(new GameItem(GameItem.ItemCategory.Miscellaneous, id, name, price));
+        }
+        private static void BuildWeapon(int id, string name, int price, int minimumDamage, int maximumDamage)
+        {
+            _standardGameItems.Add(new GameItem(GameItem.ItemCategory.Weapon, id, name, price, true, minimumDamage, maximumDamage));
         }
     }
 }
