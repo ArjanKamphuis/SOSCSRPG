@@ -42,6 +42,11 @@ namespace WPFUI
             _gameSession.AttackCurrentMonster();
         }
 
+        private void OnClick_UseCurrentConsumable(object sender, RoutedEventArgs e)
+        {
+            _gameSession.UseCurrentConsumable();
+        }
+
         private void OnClick_DisplayTradeScreen(object sender, RoutedEventArgs e)
         {
             TradeScreen tradeScreen = new TradeScreen() { Owner = this, DataContext = _gameSession };

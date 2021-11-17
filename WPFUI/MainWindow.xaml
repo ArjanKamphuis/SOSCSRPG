@@ -148,9 +148,10 @@
             </Grid.ColumnDefinitions>
             
             <!-- Combat Controls -->
-            <Grid Grid.Row="0" Grid.Column="0" Visibility="{Binding HasMonster, Converter={StaticResource BooleanToVisibility}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -159,8 +160,13 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding CurrentPlayer.Weapons}" SelectedItem="{Binding CurrentPlayer.CurrentWeapon}" DisplayMemberPath="Name" SelectedValuePath="Id"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Use" Click="OnClick_AttackMonster"/>
+                <ComboBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding CurrentPlayer.Weapons}" SelectedItem="{Binding CurrentPlayer.CurrentWeapon}" DisplayMemberPath="Name"
+                          Visibility="{Binding HasMonster, Converter={StaticResource BooleanToVisibility}}"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="Use" Click="OnClick_AttackMonster" Visibility="{Binding HasMonster, Converter={StaticResource BooleanToVisibility}}"/>
+
+                <ComboBox Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CurrentPlayer.Consumables}" SelectedItem="{Binding CurrentPlayer.CurrentConsumable}" DisplayMemberPath="Name"
+                          Visibility="{Binding CurrentPlayer.HasConsumbale, Converter={StaticResource BooleanToVisibility}}"/>
+                <Button Grid.Row="2" Grid.Column="2" Content="Use" Click="OnClick_UseCurrentConsumable" Visibility="{Binding CurrentPlayer.HasConsumbale, Converter={StaticResource BooleanToVisibility}}"/>
             </Grid>
 
             <!-- Movement Controls -->

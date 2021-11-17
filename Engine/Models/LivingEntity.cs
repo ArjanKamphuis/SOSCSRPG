@@ -14,7 +14,9 @@ namespace Engine.Models
         private int _maximumHitPoints;
         private int _gold;
         private int _level;
+
         private GameItem _currentWeapon;
+        private GameItem _currentConsumable;
 
         public string Name
         {
@@ -78,6 +80,23 @@ namespace Engine.Models
                 OnPropertyChanged();
             }
         }
+        public GameItem CurrentConsumable
+        {
+            get => _currentConsumable;
+            set
+            {
+                if (_currentConsumable != null)
+                {
+                    _currentConsumable.Action.OnActionPerformed -= RaiseActionPerformedEvent;
+                }
+                _currentConsumable = value;
+                if (_currentConsumable != null)
+                {
+                    _currentConsumable.Action.OnActionPerformed += RaiseActionPerformedEvent;
+                }
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsDead => CurrentHitPoints <= 0;
 
@@ -85,6 +104,8 @@ namespace Engine.Models
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; } = new ObservableCollection<GroupedInventoryItem>();
 
         public List<GameItem> Weapons => Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon).ToList();
+        public List<GameItem> Consumables => Inventory.Where(i => i.Category == GameItem.ItemCategory.Consumable).ToList();
+        public bool HasConsumbale => Consumables.Any();
 
         #endregion
 
@@ -104,6 +125,8 @@ namespace Engine.Models
         {
             Inventory.Add(item);
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
+            OnPropertyChanged(nameof(HasConsumbale));
 
             if (item.IsUnique)
             {
@@ -126,6 +149,8 @@ namespace Engine.Models
         {
             _ = Inventory.Remove(item);
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
+            OnPropertyChanged(nameof(HasConsumbale));
 
             GroupedInventoryItem groupedInventoryItemToRemove = item.IsUnique
                 ? GroupedInventory.SingleOrDefault(gi => gi.Item == item)
@@ -148,6 +173,12 @@ namespace Engine.Models
         {
             CurrentWeapon.PerformAction(this, target);
         }
+        public void UseCurrentConsumable()
+        {
+            CurrentConsumable.PerformAction(this, this);
+            RemoveItemFromInventory(CurrentConsumable);
+        }
+
         public void TakeDamage(int hitPointsOfDamage)
         {
             CurrentHitPoints -= hitPointsOfDamage;
