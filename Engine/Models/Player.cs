@@ -33,6 +33,7 @@ namespace Engine.Models
         }
 
         public ObservableCollection<QuestStatus> Quests { get; } = new ObservableCollection<QuestStatus>();
+        public ObservableCollection<Recipe> Recipes { get; } = new ObservableCollection<Recipe>();
 
         #endregion
 
@@ -60,6 +61,14 @@ namespace Engine.Models
         public void AddExperience(int experiencePoints)
         {
             ExperiencePoints += experiencePoints;
+        }
+
+        public void LearnRecipe(Recipe recipe)
+        {
+            if (!Recipes.Any(r => r.Id == recipe.Id))
+            {
+                Recipes.Add(recipe);
+            }
         }
 
         private void SetLevelAndMaximumHitPoints()
