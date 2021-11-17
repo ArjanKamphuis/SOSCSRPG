@@ -65,11 +65,13 @@ namespace Engine.ViewModels
                 if (_currentMonster != null)
                 {
                     _currentMonster.OnKilled -= OnCurrentMonsterKilled;
+                    _currentMonster.OnActionPerformed -= OnCurrentMonsterPerformedAction;
                 }
                 _currentMonster = value;
                 if (_currentMonster != null)
                 {
                     _currentMonster.OnKilled += OnCurrentMonsterKilled;
+                    _currentMonster.OnActionPerformed += OnCurrentMonsterPerformedAction;
                     RaiseMessage("");
                     RaiseMessage($"You see a {_currentMonster.Name} here!");
                 }
@@ -217,16 +219,7 @@ namespace Engine.ViewModels
             }
             else
             {
-                int damageToPlayer = RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDage, CurrentMonster.MaximumDamage);
-                if (damageToPlayer == 0)
-                {
-                    RaiseMessage($"The {CurrentMonster.Name} attacks, but missed you.");
-                }
-                else
-                {
-                    RaiseMessage($"The {CurrentMonster.Name} hit your for {damageToPlayer} points.");
-                    CurrentPlayer.TakeDamage(damageToPlayer);
-                }
+                CurrentMonster.UseCurrentWeaponOn(CurrentPlayer);
             }
         }
 
@@ -237,6 +230,16 @@ namespace Engine.ViewModels
 
             CurrentLocation = CurrentWorld.LocationAt(0, -1);
             CurrentPlayer.CompletelyHeal();
+        }
+
+        private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs e)
+        {
+            RaiseMessage($"You are now level {CurrentPlayer.Level}!");
+        }
+
+        private void OnCurrentPlayerPerformedAction(object sender, string result)
+        {
+            RaiseMessage(result);
         }
 
         private void OnCurrentMonsterKilled(object sender, System.EventArgs e)
@@ -256,12 +259,7 @@ namespace Engine.ViewModels
             }
         }
 
-        private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs e)
-        {
-            RaiseMessage($"You are now level {CurrentPlayer.Level}!");
-        }
-
-        private void OnCurrentPlayerPerformedAction(object sender, string result)
+        private void OnCurrentMonsterPerformedAction(object sender, string result)
         {
             RaiseMessage(result);
         }
