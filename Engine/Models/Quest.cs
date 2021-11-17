@@ -8,13 +8,13 @@ namespace Engine.Models
         public string Name { get; }
         public string Description { get; }
 
-        public List<ItemQuantity> ItemsToComplete { get; }
+        public IEnumerable<ItemQuantity> ItemsToComplete { get; }
 
         public int RewardExperiencePoints { get; }
         public int RewardGold { get; }
-        public List<ItemQuantity> RewardItems { get; }
+        public IEnumerable<ItemQuantity> RewardItems { get; }
 
-        public Quest(int id, string name, string description, List<ItemQuantity> itemsToComplete, int rewardExperiencePoints, int rewardGold, List<ItemQuantity> rewardItems)
+        public Quest(int id, string name, string description, IEnumerable<ItemQuantity> itemsToComplete, int rewardExperiencePoints, int rewardGold, IEnumerable<ItemQuantity> rewardItems)
         {
             Id = id;
             Name = name;

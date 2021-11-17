@@ -26,7 +26,7 @@ namespace Engine.Factories
             newWorld.LocationAt(2, 0).AddMonster(3, 100);
 
             newWorld.AddLocation(0, 1, "Herbalist's hut", "You see a small hut, with plants drying from the roof.", "HerbalistsHut.png");
-            newWorld.LocationAt(0, 1).QuestsAvailableHere.Add(QuestFactory.GetQuestById(1));
+            newWorld.LocationAt(0, 1).AddQuest(1);
             newWorld.LocationAt(0, 1).TraderHere = TraderFactory.GetTraderByName("Pete the Herbalist");
 
             newWorld.AddLocation(0, 2, "Herbalist's garden", "There are many plants here, with snakes hiding behind them.", "HerbalistsGarden.png");

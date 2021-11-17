@@ -6,10 +6,15 @@ namespace Engine.Models
 {
     public class Player : LivingEntity
     {
+        public event EventHandler OnLeveledUp;
+
         #region Properties
 
         private string _characterClass;
         private int _experiencePoints;
+
+        private readonly ObservableCollection<QuestStatus> _quests = new ObservableCollection<QuestStatus>();
+        private readonly ObservableCollection<Recipe> _recipes = new ObservableCollection<Recipe>();
 
         public string CharacterClass
         {
@@ -31,18 +36,19 @@ namespace Engine.Models
             }
         }
 
-        public ObservableCollection<QuestStatus> Quests { get; } = new ObservableCollection<QuestStatus>();
-        public ObservableCollection<Recipe> Recipes { get; } = new ObservableCollection<Recipe>();
+        public ReadOnlyObservableCollection<QuestStatus> Quests { get; }
+        public ReadOnlyObservableCollection<Recipe> Recipes { get; }
 
         #endregion
-
-        public event EventHandler OnLeveledUp;
 
         public Player(string name, string characterClass, int experiencePoints, int maximumHitPoints, int currentHitPoints, int gold)
             : base(name, maximumHitPoints, currentHitPoints, gold)
         {
             CharacterClass = characterClass;
             ExperiencePoints = experiencePoints;
+
+            Quests = new ReadOnlyObservableCollection<QuestStatus>(_quests);
+            Recipes = new ReadOnlyObservableCollection<Recipe>(_recipes);
         }
 
         public void AddExperience(int experiencePoints)
@@ -50,11 +56,25 @@ namespace Engine.Models
             ExperiencePoints += experiencePoints;
         }
 
+        /// <summary>
+        /// Returns true when accepted
+        /// </summary>
+        /// <param name="quest">Quest to accept</param>
+        public bool GiveQuest(Quest quest)
+        {
+            if (!Quests.Any(q => q.PlayerQuest.Id == quest.Id))
+            {
+                _quests.Add(new QuestStatus(quest));
+                return true;
+            }
+            return false;
+        }
+
         public void LearnRecipe(Recipe recipe)
         {
             if (!Recipes.Any(r => r.Id == recipe.Id))
             {
-                Recipes.Add(recipe);
+                _recipes.Add(recipe);
             }
         }
 

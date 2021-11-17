@@ -122,29 +122,39 @@ namespace Engine.ViewModels
 
         public void MoveNorth()
         {
-            if (HasLocationToNorth) CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1);
+            if (HasLocationToNorth)
+            {
+                CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1);
+            }
         }
         public void MoveEast()
         {
-            if (HasLocationToEast) CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate);
+            if (HasLocationToEast)
+            {
+                CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate);
+            }
         }
         public void MoveSouth()
         {
-            if (HasLocationToSouth) CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1);
+            if (HasLocationToSouth)
+            {
+                CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1);
+            }
         }
         public void MoveWest()
         {
-            if (HasLocationToWest) CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate);
+            if (HasLocationToWest)
+            {
+                CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate);
+            }
         }
 
         private void GivePlayerQuestsAtLocation()
         {
             foreach (Quest quest in CurrentLocation.QuestsAvailableHere)
             {
-                if (!CurrentPlayer.Quests.Any(q => q.PlayerQuest.Id == quest.Id))
+                if (CurrentPlayer.GiveQuest(quest))
                 {
-                    CurrentPlayer.Quests.Add(new QuestStatus(quest));
-
                     RaiseMessage("");
                     RaiseMessage($"You receive the '{quest.Name}' quest");
                     RaiseMessage(quest.Description);
@@ -175,7 +185,7 @@ namespace Engine.ViewModels
                 {
                     if (CurrentPlayer.HasAllTheseItems(quest.ItemsToComplete))
                     {
-                        CurrentPlayer.RemoveItemsFromIventory(quest.ItemsToComplete);
+                        CurrentPlayer.RemoveItemsFromInventory(quest.ItemsToComplete);
 
                         RaiseMessage("");
                         RaiseMessage($"You completed the '{quest.Name}' quest");
@@ -232,7 +242,7 @@ namespace Engine.ViewModels
         {
             if (CurrentPlayer.HasAllTheseItems(recipe.Ingredients))
             {
-                CurrentPlayer.RemoveItemsFromIventory(recipe.Ingredients);
+                CurrentPlayer.RemoveItemsFromInventory(recipe.Ingredients);
                 foreach (ItemQuantity itemQuantity in recipe.OutputItems)
                 {
                     for (int i = 0; i < itemQuantity.Quantity; i++)

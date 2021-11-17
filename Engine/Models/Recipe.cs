@@ -11,8 +11,8 @@ namespace Engine.Models
         public int Id { get; }
         public string Name { get; }
 
-        public IReadOnlyList<ItemQuantity> Ingredients => _ingredients;
-        public IReadOnlyList<ItemQuantity> OutputItems => _outputItems;
+        public IEnumerable<ItemQuantity> Ingredients => _ingredients;
+        public IEnumerable<ItemQuantity> OutputItems => _outputItems;
 
         public Recipe(int id, string name)
         {
