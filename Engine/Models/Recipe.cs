@@ -29,7 +29,7 @@ namespace Engine.Models
         }
         public void AddOutputItem(int itemId, int quantity)
         {
-            if (_outputItems.Any(x => x.ItemId == itemId))
+            if (!_outputItems.Any(x => x.ItemId == itemId))
             {
                 _outputItems.Add(new ItemQuantity(itemId, quantity));
             }

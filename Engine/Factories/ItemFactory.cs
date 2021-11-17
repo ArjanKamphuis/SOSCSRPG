@@ -37,6 +37,11 @@ namespace Engine.Factories
             return _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId)?.Clone();
         }
 
+        internal static string ItemName(int itemTypeId)
+        {
+            return _standardGameItems.SingleOrDefault(i => i.ItemTypeId == itemTypeId)?.Name ?? "";
+        }
+
         private static void BuildMiscellaneousItem(int id, string name, int price)
         {
             _standardGameItems.Add(new GameItem(GameItem.ItemCategory.Miscellaneous, id, name, price));

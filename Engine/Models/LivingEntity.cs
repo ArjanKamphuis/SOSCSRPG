@@ -169,6 +169,29 @@ namespace Engine.Models
             }
         }
 
+        public void RemoveItemsFromIventory(IEnumerable<ItemQuantity> itemQuantities)
+        {
+            foreach (ItemQuantity itemQuantity in itemQuantities)
+            {
+                for (int i = 0; i < itemQuantity.Quantity; i++)
+                {
+                    RemoveItemFromInventory(Inventory.Single(item => item.ItemTypeId == itemQuantity.ItemId));
+                }
+            }
+        }
+
+        public bool HasAllTheseItems(IEnumerable<ItemQuantity> items)
+        {
+            foreach (ItemQuantity item in items)
+            {
+                if (Inventory.Count(i => i.ItemTypeId == item.ItemId) < item.Quantity)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public void UseCurrentWeaponOn(LivingEntity target)
         {
             CurrentWeapon.PerformAction(this, target);
