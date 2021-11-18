@@ -6,7 +6,7 @@ namespace Engine.Models
 {
     public class Location
     {
-        private readonly List<Quest> _quests = new List<Quest>();
+        private readonly List<Quest> _questsAvailableHere = new List<Quest>();
         private readonly List<MonsterEncounter> _monstersHere = new List<MonsterEncounter>();
 
         public int XCoordinate { get; }
@@ -14,7 +14,7 @@ namespace Engine.Models
         public string Name { get; }
         public string Description { get; }
         public string ImageName { get; }
-        public IEnumerable<Quest> QuestsAvailableHere => _quests;
+        public IEnumerable<Quest> QuestsAvailableHere => _questsAvailableHere;
         public IEnumerable<MonsterEncounter> MonstersHere => _monstersHere;
         public Trader TraderHere { get; set; }
 
@@ -29,9 +29,9 @@ namespace Engine.Models
 
         public void AddQuest(int questId)
         {
-            if (!_quests.Any(q => q.Id == questId))
+            if (!QuestsAvailableHere.Any(q => q.Id == questId))
             {
-                _quests.Add(QuestFactory.GetQuestById(questId));
+                _questsAvailableHere.Add(QuestFactory.GetQuestById(questId));
             }
         }
 
