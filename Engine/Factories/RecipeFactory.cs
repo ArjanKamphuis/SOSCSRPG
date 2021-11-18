@@ -44,7 +44,7 @@ namespace Engine.Factories
                 }
                 foreach (XmlNode childNode in node.SelectNodes("./OutputItems/Item"))
                 {
-                    recipe.AddIngredient(childNode.AttributeAsInt("Id"), childNode.AttributeAsInt("Quantity"));
+                    recipe.AddOutputItem(childNode.AttributeAsInt("Id"), childNode.AttributeAsInt("Quantity"));
                 }
 
                 _recipes.Add(recipe);

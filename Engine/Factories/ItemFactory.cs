@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace Engine.Factories
 {
-    internal static class ItemFactory
+    public static class ItemFactory
     {
         private const string GAME_DATA_FILENAME = ".\\GameData\\GameItems.xml";
 
@@ -32,12 +32,12 @@ namespace Engine.Factories
             }
         }
 
-        internal static GameItem CreateGameItem(int itemTypeId)
+        public static GameItem CreateGameItem(int itemTypeId)
         {
             return _standardGameItems.SingleOrDefault(item => item.ItemTypeId == itemTypeId)?.Clone();
         }
 
-        internal static string ItemName(int itemTypeId)
+        public static string ItemName(int itemTypeId)
         {
             return _standardGameItems.SingleOrDefault(i => i.ItemTypeId == itemTypeId)?.Name ?? "";
         }
