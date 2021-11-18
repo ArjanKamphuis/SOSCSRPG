@@ -76,7 +76,7 @@ namespace Engine.Factories
         {
             if (traderHere != null)
             {
-                location.TraderHere = TraderFactory.GetTraderByName(traderHere.AttributeAsString("Name"));
+                location.TraderHere = TraderFactory.GetTraderById(traderHere.AttributeAsInt("Id"));
             }
         }
     }

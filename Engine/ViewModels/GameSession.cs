@@ -111,7 +111,7 @@ namespace Engine.ViewModels
             }
 
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(2001));
-            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeById(1));
+            CurrentPlayer.LearnRecipe(RecipeFactory.GetRecipeById(1));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3001));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3002));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3003));
