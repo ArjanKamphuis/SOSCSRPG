@@ -29,7 +29,7 @@ namespace Engine.Factories
             else
             {
                 throw new FileNotFoundException($"Missing data file: {GAME_DATA_FILENAME}");
-            }    
+            }
         }
 
         internal static GameItem CreateGameItem(int itemTypeId)
