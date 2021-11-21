@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Engine.Services;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Engine.Models
 {
@@ -18,8 +17,7 @@ namespace Engine.Models
         private GameItem _currentWeapon;
         private GameItem _currentConsumable;
 
-        private readonly ObservableCollection<GameItem> _inventory = new ObservableCollection<GameItem>();
-        private readonly ObservableCollection<GroupedInventoryItem> _groupedInventory = new ObservableCollection<GroupedInventoryItem>();
+        private Inventory _inventory;
 
         public string Name
         {
@@ -100,15 +98,17 @@ namespace Engine.Models
                 OnPropertyChanged();
             }
         }
+        public Inventory Inventory
+        {
+            get => _inventory;
+            private set
+            {
+                _inventory = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsDead => CurrentHitPoints <= 0;
-
-        public ReadOnlyObservableCollection<GameItem> Inventory { get; }
-        public ReadOnlyObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
-
-        public IEnumerable<GameItem> Weapons => Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon);
-        public IEnumerable<GameItem> Consumables => Inventory.Where(i => i.Category == GameItem.ItemCategory.Consumable);
-        public bool HasConsumbale => Consumables.Any();
 
         #endregion
 
@@ -123,79 +123,21 @@ namespace Engine.Models
             Gold = gold;
             Level = level;
 
-            Inventory = new ReadOnlyObservableCollection<GameItem>(_inventory);
-            GroupedInventory = new ReadOnlyObservableCollection<GroupedInventoryItem>(_groupedInventory);
+            Inventory = new Inventory();
         }
 
         public void AddItemToInventory(GameItem item)
         {
-            _inventory.Add(item);
-            OnPropertyChanged(nameof(Weapons));
-            OnPropertyChanged(nameof(Consumables));
-            OnPropertyChanged(nameof(HasConsumbale));
-
-            if (item.IsUnique)
-            {
-                _groupedInventory.Add(new GroupedInventoryItem(item, 1));
-            }
-            else
-            {
-                GroupedInventoryItem groupedInventoryItem = GroupedInventory.SingleOrDefault(gi => gi.Item.ItemTypeId == item.ItemTypeId);
-                if (groupedInventoryItem == null)
-                {
-                    _groupedInventory.Add(new GroupedInventoryItem(item, 1));
-                }
-                else
-                {
-                    groupedInventoryItem.Quantity++;
-                }
-            }
+            Inventory = Inventory.AddItem(item);
         }
         public void RemoveItemFromInventory(GameItem item)
         {
-            _ = _inventory.Remove(item);
-            OnPropertyChanged(nameof(Weapons));
-            OnPropertyChanged(nameof(Consumables));
-            OnPropertyChanged(nameof(HasConsumbale));
-
-            GroupedInventoryItem groupedInventoryItemToRemove = item.IsUnique
-                ? GroupedInventory.SingleOrDefault(gi => gi.Item == item)
-                : GroupedInventory.SingleOrDefault(gi => gi.Item.ItemTypeId == item.ItemTypeId);
-
-            if (groupedInventoryItemToRemove != null)
-            {
-                if (groupedInventoryItemToRemove.Quantity == 1)
-                {
-                    _ = _groupedInventory.Remove(groupedInventoryItemToRemove);
-                }
-                else
-                {
-                    groupedInventoryItemToRemove.Quantity--;
-                }
-            }
+            Inventory = Inventory.RemoveItem(item);
         }
 
         public void RemoveItemsFromInventory(IEnumerable<ItemQuantity> itemQuantities)
         {
-            foreach (ItemQuantity itemQuantity in itemQuantities)
-            {
-                for (int i = 0; i < itemQuantity.Quantity; i++)
-                {
-                    RemoveItemFromInventory(Inventory.First(item => item.ItemTypeId == itemQuantity.ItemId));
-                }
-            }
-        }
-
-        public bool HasAllTheseItems(IEnumerable<ItemQuantity> items)
-        {
-            foreach (ItemQuantity item in items)
-            {
-                if (Inventory.Count(i => i.ItemTypeId == item.ItemId) < item.Quantity)
-                {
-                    return false;
-                }
-            }
-            return true;
+            Inventory = Inventory.RemoveItems(itemQuantities);
         }
 
         public void UseCurrentWeaponOn(LivingEntity target)
