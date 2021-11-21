@@ -1,5 +1,6 @@
 ﻿using Engine.EventArgs;
 using Engine.Models;
+using Engine.Services;
 using Engine.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,9 @@ using System.Windows.Input;
 
 namespace WPFUI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MessageBroker _messageBroker = MessageBroker.GetInstance();
         private readonly GameSession _gameSession = new GameSession();
         private readonly Dictionary<Key, Action> _userInputActions = new Dictionary<Key, Action>();
 
@@ -23,7 +22,7 @@ namespace WPFUI
             InitializeComponent();
             InitializeUserInputActions();
 
-            _gameSession.OnMessageRaised += OnGameMessageRaised;
+            _messageBroker.OnMessageRaised += OnGameMessageRaised;
             DataContext = _gameSession;
         }
 

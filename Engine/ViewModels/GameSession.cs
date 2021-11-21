@@ -1,6 +1,7 @@
 ﻿using Engine.EventArgs;
 using Engine.Factories;
 using Engine.Models;
+using Engine.Services;
 using System;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace Engine.ViewModels
 {
     public class GameSession : BaseNotificationClass
     {
-        public event EventHandler<GameMessageEventArgs> OnMessageRaised;
+        private readonly MessageBroker _messageBroker = MessageBroker.GetInstance();
 
         #region Properties
 
@@ -315,7 +316,7 @@ namespace Engine.ViewModels
 
         private void RaiseMessage(string message)
         {
-            OnMessageRaised?.Invoke(this, new GameMessageEventArgs(message));
+            _messageBroker.RaiseMessage(message);
         }
 
         #endregion
