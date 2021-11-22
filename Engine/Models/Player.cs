@@ -69,6 +69,15 @@ namespace Engine.Models
             }
             return false;
         }
+        public bool GiveQuest(QuestStatus quest)
+        {
+            if (!Quests.Any(q => q.PlayerQuest.Id == quest.PlayerQuest.Id))
+            {
+                _quests.Add(quest);
+                return true;
+            }
+            return false;
+        }
 
         public void LearnRecipe(Recipe recipe)
         {
