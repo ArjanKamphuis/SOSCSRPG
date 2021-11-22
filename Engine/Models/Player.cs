@@ -41,8 +41,8 @@ namespace Engine.Models
 
         #endregion
 
-        public Player(string name, string characterClass, int experiencePoints, int maximumHitPoints, int currentHitPoints, int gold)
-            : base(name, maximumHitPoints, currentHitPoints, gold)
+        public Player(string name, string characterClass, int experiencePoints, int maximumHitPoints, int currentHitPoints, int dexterity, int gold)
+            : base(name, maximumHitPoints, currentHitPoints, dexterity, gold)
         {
             CharacterClass = characterClass;
             ExperiencePoints = experiencePoints;

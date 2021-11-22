@@ -1,4 +1,5 @@
 ﻿using Engine.Models;
+using Engine.Services;
 using System;
 
 namespace Engine.Actions
@@ -33,15 +34,15 @@ namespace Engine.Actions
             string actorName = actor is Player ? "You" : $"The {actor.Name.ToLower()}";
             string targetName = target is Player ? "you" : $"the {target.Name.ToLower()}";
 
-            int damage = RandomNumberGenerator.NumberBetween(_minimumDamage, _maximumDamage);
-            if (damage == 0)
+            if (CombatService.AttackSucceeded(actor, target))
             {
-                ReportResult($"{actorName} missed {targetName}.");
+                int damage = RandomNumberGenerator.NumberBetween(_minimumDamage, _maximumDamage);
+                ReportResult($"{actorName} hit {targetName} for {damage} points.");
+                target.TakeDamage(damage);
             }
             else
             {
-                ReportResult($"{actorName} hit {targetName} for {damage} points.");
-                target.TakeDamage(damage);
+                ReportResult($"{actorName} missed {targetName}.");
             }
         }
     }

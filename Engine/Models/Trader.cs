@@ -5,7 +5,7 @@
         public int Id { get; }
 
         public Trader(int id, string name)
-            : base(name, 9999, 9999, 9999)
+            : base(name, 9999, 9999, 18, 9999)
         {
             Id = id;
         }

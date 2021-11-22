@@ -1,5 +1,6 @@
 ﻿using Engine.Models;
 using Engine.Shared;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,7 +39,8 @@ namespace Engine.Factories
             foreach (XmlNode node in nodes)
             {
                 Monster monster = new Monster(node.AttributeAsInt("Id"), node.AttributeAsString("Name"), $".{rootImagePath}{node.AttributeAsString("ImageName")}",
-                    node.AttributeAsInt("MaximumHitPoints"), ItemFactory.CreateGameItem(node.AttributeAsInt("WeaponId")), node.AttributeAsInt("RewardXP"), node.AttributeAsInt("Gold"));
+                    node.AttributeAsInt("MaximumHitPoints"), Convert.ToInt32(node.SelectSingleNode("./Dexterity").InnerText), 
+                    ItemFactory.CreateGameItem(node.AttributeAsInt("WeaponId")), node.AttributeAsInt("RewardXP"), node.AttributeAsInt("Gold"));
 
                 XmlNodeList lootItemNodes = node.SelectNodes("./LootItems/LootItem");
                 if (lootItemNodes != null)

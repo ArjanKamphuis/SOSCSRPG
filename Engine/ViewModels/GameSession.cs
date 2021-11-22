@@ -21,7 +21,7 @@ namespace Engine.ViewModels
         public Player CurrentPlayer
         {
             get => _currentPlayer;
-            set
+            private set
             {
                 if (_currentPlayer != null)
                 {
@@ -39,7 +39,7 @@ namespace Engine.ViewModels
         public Location CurrentLocation
         {
             get => _currentLocation;
-            set
+            private set
             {
                 _currentLocation = value;
                 CompleteQuestsAtLocation();
@@ -58,7 +58,7 @@ namespace Engine.ViewModels
         public Monster CurrentMonster
         {
             get => _currentMonster;
-            set
+            private set
             {
                 if (_currentBattle != null)
                 {
@@ -79,7 +79,7 @@ namespace Engine.ViewModels
         public Trader CurrentTrader
         {
             get => _currentTrader;
-            set
+            private set
             {
                 _currentTrader = value;
                 OnPropertyChanged();
@@ -99,7 +99,7 @@ namespace Engine.ViewModels
 
         public GameSession()
         {
-            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, 100000);
+            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, RandomNumberGenerator.NumberBetween(3, 18), 100000);
 
             if (!CurrentPlayer.Inventory.Weapons.Any())
             {
