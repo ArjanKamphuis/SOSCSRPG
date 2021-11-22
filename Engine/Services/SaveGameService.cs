@@ -11,23 +11,21 @@ namespace Engine.Services
 {
     public static class SaveGameService
     {
-        private const string SAVE_GAME_FILE_NAME = "SOSCRPG.json";
-
-        public static void Save(GameSession gameSession)
+        public static void Save(GameSession gameSession, string fileName)
         {
-            File.WriteAllText(SAVE_GAME_FILE_NAME, JsonConvert.SerializeObject(gameSession, Formatting.Indented));
+            File.WriteAllText(fileName, JsonConvert.SerializeObject(gameSession, Formatting.Indented));
         }
 
-        public static GameSession LoadLastSaveOrCreateNew()
+        public static GameSession LoadLastSaveOrCreateNew(string fileName)
         {
-            if (!File.Exists(SAVE_GAME_FILE_NAME))
+            if (!File.Exists(fileName))
             {
                 return new GameSession();
             }
 
             try
             {
-                JObject data = JObject.Parse(File.ReadAllText(SAVE_GAME_FILE_NAME));
+                JObject data = JObject.Parse(File.ReadAllText(fileName));
 
                 Player player = CreatePlayer(data);
 
@@ -124,12 +122,12 @@ namespace Engine.Services
             {
                 case "0.1.000":
                     JToken currentWeaponToken = data[nameof(GameSession.CurrentPlayer)][nameof(Player.CurrentWeapon)];
-                    if (currentWeaponToken != null)
+                    if (currentWeaponToken.HasValues)
                     {
                         player.CurrentWeapon = player.Inventory.Weapons.FirstOrDefault(weapon => weapon.ItemTypeId == (int)currentWeaponToken[nameof(GameItem.ItemTypeId)]);
                     }
                     JToken currentConsumableToken = data[nameof(GameSession.CurrentPlayer)][nameof(Player.CurrentConsumable)];
-                    if (currentConsumableToken != null)
+                    if (currentConsumableToken.HasValues)
                     {
                         player.CurrentConsumable = player.Inventory.Consumables.FirstOrDefault(consumable => consumable.ItemTypeId == (int)currentConsumableToken[nameof(GameItem.ItemTypeId)]);
                     }

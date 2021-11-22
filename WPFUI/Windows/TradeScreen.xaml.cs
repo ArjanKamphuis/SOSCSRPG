@@ -2,7 +2,7 @@
 using Engine.ViewModels;
 using System.Windows;
 
-namespace WPFUI
+namespace WPFUI.Windows
 {
     /// <summary>
     /// Interaction logic for TradeScreen.xaml
