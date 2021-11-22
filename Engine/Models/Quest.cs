@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,15 +8,22 @@ namespace Engine.Models
     public class Quest
     {
         public int Id { get; }
+        [JsonIgnore]
         public string Name { get; }
+        [JsonIgnore]
         public string Description { get; }
 
+        [JsonIgnore]
         public IEnumerable<ItemQuantity> ItemsToComplete { get; }
 
+        [JsonIgnore]
         public int RewardExperiencePoints { get; }
+        [JsonIgnore]
         public int RewardGold { get; }
+        [JsonIgnore]
         public IEnumerable<ItemQuantity> RewardItems { get; }
 
+        [JsonIgnore]
         public string ToolTipContents =>
             Description + Environment.NewLine + Environment.NewLine + "Items to complete the quest" + Environment.NewLine + "===========================" + Environment.NewLine +
             string.Join(Environment.NewLine, ItemsToComplete.Select(i => i.QuantityItemDescription)) + Environment.NewLine + Environment.NewLine + "Rewards" + Environment.NewLine +

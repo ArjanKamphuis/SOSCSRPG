@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Engine.Services
 {
@@ -60,6 +61,7 @@ namespace Engine.Services
             PopulatePlayerInventory(data, player);
             PopulatePlayerQuests(data, player);
             PopulatePlayerRecipes(data, player);
+            PopulateCurrentItems(data, player);
 
             return player;
         }
@@ -108,6 +110,28 @@ namespace Engine.Services
                     {
                         int recipeId = (int)recipeToken[nameof(Recipe.Id)];
                         player.LearnRecipe(RecipeFactory.GetRecipeById(recipeId));
+                    }
+                    break;
+                default:
+                    throw new InvalidDataException($"File version '{fileVersion}' not recognized");
+            }
+        }
+
+        private static void PopulateCurrentItems(JObject data, Player player)
+        {
+            string fileVersion = FileVersion(data);
+            switch (fileVersion)
+            {
+                case "0.1.000":
+                    JToken currentWeaponToken = data[nameof(GameSession.CurrentPlayer)][nameof(Player.CurrentWeapon)];
+                    if (currentWeaponToken != null)
+                    {
+                        player.CurrentWeapon = player.Inventory.Weapons.FirstOrDefault(weapon => weapon.ItemTypeId == (int)currentWeaponToken[nameof(GameItem.ItemTypeId)]);
+                    }
+                    JToken currentConsumableToken = data[nameof(GameSession.CurrentPlayer)][nameof(Player.CurrentConsumable)];
+                    if (currentConsumableToken != null)
+                    {
+                        player.CurrentConsumable = player.Inventory.Consumables.FirstOrDefault(consumable => consumable.ItemTypeId == (int)currentConsumableToken[nameof(GameItem.ItemTypeId)]);
                     }
                     break;
                 default:
