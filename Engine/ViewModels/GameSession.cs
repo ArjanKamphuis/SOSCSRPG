@@ -1,8 +1,6 @@
-﻿using Engine.EventArgs;
-using Engine.Factories;
+﻿using Engine.Factories;
 using Engine.Models;
 using Engine.Services;
-using System;
 using System.Linq;
 
 namespace Engine.ViewModels
@@ -10,6 +8,7 @@ namespace Engine.ViewModels
     public class GameSession : BaseNotificationClass
     {
         private readonly MessageBroker _messageBroker = MessageBroker.GetInstance();
+        private Battle _currentBattle;
 
         #region Properties
 
@@ -26,16 +25,14 @@ namespace Engine.ViewModels
             {
                 if (_currentPlayer != null)
                 {
-                    _currentPlayer.OnKilled -= OnCurrentPlayerKilled;
-                    _currentPlayer.OnLeveledUp -= OnCurrentPlayerLeveledUp;
-                    _currentPlayer.OnActionPerformed -= OnCurrentPlayerPerformedAction;
+                    _currentPlayer.OnKilled -= OnPlayerKilled;
+                    _currentPlayer.OnLeveledUp -= OnPlayerLeveledUp;
                 }
                 _currentPlayer = value;
                 if (_currentPlayer != null)
                 {
-                    _currentPlayer.OnKilled += OnCurrentPlayerKilled;
-                    _currentPlayer.OnLeveledUp += OnCurrentPlayerLeveledUp;
-                    _currentPlayer.OnActionPerformed += OnCurrentPlayerPerformedAction;
+                    _currentPlayer.OnKilled += OnPlayerKilled;
+                    _currentPlayer.OnLeveledUp += OnPlayerLeveledUp;
                 }
             }
         }
@@ -47,7 +44,7 @@ namespace Engine.ViewModels
                 _currentLocation = value;
                 CompleteQuestsAtLocation();
                 GivePlayerQuestsAtLocation();
-                GetMonsterAtLocation();
+                CurrentMonster = CurrentLocation.GetMonster();
 
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasLocationToNorth));
@@ -63,18 +60,16 @@ namespace Engine.ViewModels
             get => _currentMonster;
             set
             {
-                if (_currentMonster != null)
+                if (_currentBattle != null)
                 {
-                    _currentMonster.OnKilled -= OnCurrentMonsterKilled;
-                    _currentMonster.OnActionPerformed -= OnCurrentMonsterPerformedAction;
+                    _currentBattle.OnCombatVictory -= OnCurrentMonsterKilled;
+                    _currentBattle.Dispose();
                 }
                 _currentMonster = value;
                 if (_currentMonster != null)
                 {
-                    _currentMonster.OnKilled += OnCurrentMonsterKilled;
-                    _currentMonster.OnActionPerformed += OnCurrentMonsterPerformedAction;
-                    RaiseMessage("");
-                    RaiseMessage($"You see a {_currentMonster.Name} here!");
+                    _currentBattle = new Battle(CurrentPlayer, CurrentMonster);
+                    _currentBattle.OnCombatVictory += OnCurrentMonsterKilled;
                 }
 
                 OnPropertyChanged();
@@ -211,33 +206,9 @@ namespace Engine.ViewModels
             }
         }
 
-        private void GetMonsterAtLocation()
-        {
-            CurrentMonster = CurrentLocation.GetMonster();
-        }
-
         public void AttackCurrentMonster()
         {
-            if (CurrentMonster == null)
-            {
-                return;
-            }
-            if (CurrentPlayer.CurrentWeapon == null)
-            {
-                RaiseMessage("You must select a weapon, to attack.");
-                return;
-            }
-
-            CurrentPlayer.UseCurrentWeaponOn(CurrentMonster);
-
-            if (CurrentMonster.IsDead)
-            {
-                GetMonsterAtLocation();
-            }
-            else
-            {
-                CurrentMonster.UseCurrentWeaponOn(CurrentPlayer);
-            }
+            _currentBattle.AttackOpponent();
         }
 
         public void UseCurrentConsumable()
@@ -273,7 +244,7 @@ namespace Engine.ViewModels
             }
         }
 
-        private void OnCurrentPlayerKilled(object sender, System.EventArgs e)
+        private void OnPlayerKilled(object sender, System.EventArgs e)
         {
             RaiseMessage("");
             RaiseMessage($"You have been killed.");
@@ -282,36 +253,14 @@ namespace Engine.ViewModels
             CurrentPlayer.CompletelyHeal();
         }
 
-        private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs e)
+        private void OnPlayerLeveledUp(object sender, System.EventArgs e)
         {
             RaiseMessage($"You are now level {CurrentPlayer.Level}!");
         }
 
-        private void OnCurrentPlayerPerformedAction(object sender, string result)
-        {
-            RaiseMessage(result);
-        }
-
         private void OnCurrentMonsterKilled(object sender, System.EventArgs e)
         {
-            RaiseMessage("");
-            RaiseMessage($"You defeated the {CurrentMonster.Name}!");
-
-            RaiseMessage($"You receive {CurrentMonster.RewardExperiencePoints} experience points.");
-            CurrentPlayer.AddExperience(CurrentMonster.RewardExperiencePoints);
-            RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
-            CurrentPlayer.ReceiveGold(CurrentMonster.Gold);
-
-            foreach (GameItem gameItem in CurrentMonster.Inventory.Items)
-            {
-                RaiseMessage($"You receive one {gameItem.Name}.");
-                CurrentPlayer.AddItemToInventory(gameItem);
-            }
-        }
-
-        private void OnCurrentMonsterPerformedAction(object sender, string result)
-        {
-            RaiseMessage(result);
+            CurrentMonster = CurrentLocation.GetMonster();
         }
 
         private void RaiseMessage(string message)
