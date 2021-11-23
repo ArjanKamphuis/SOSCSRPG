@@ -16,10 +16,7 @@ namespace Engine.Models
         {
             _player = player;
             _opponent = opponent;
-
-            _player.OnActionPerformed += OnCombatantActionPerformed;
-            _opponent.OnActionPerformed += OnCombatantActionPerformed;
-            _opponent.OnKilled += OnOpponentKilled;
+            SubscribeMembers();
 
             _messageBroker.RaiseMessage("");
             _messageBroker.RaiseMessage($"You see a {_opponent.Name} here!");
@@ -47,6 +44,17 @@ namespace Engine.Models
         }
 
         public void Dispose()
+        {
+            UnsubscribeMembers();
+        }
+
+        private void SubscribeMembers()
+        {
+            _player.OnActionPerformed += OnCombatantActionPerformed;
+            _opponent.OnActionPerformed += OnCombatantActionPerformed;
+            _opponent.OnKilled += OnOpponentKilled;
+        }
+        private void UnsubscribeMembers()
         {
             _player.OnActionPerformed -= OnCombatantActionPerformed;
             _opponent.OnActionPerformed -= OnCombatantActionPerformed;

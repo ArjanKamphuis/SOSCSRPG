@@ -107,7 +107,8 @@ namespace WPFUI.Windows
         private void SetActiveGameSessionTo(GameSession gameSession)
         {
             _messageBroker.OnMessageRaised -= OnGameMessageRaised;
-
+            
+            _gameSession?.Dispose();
             _gameSession = gameSession;
             DataContext = _gameSession;
 

@@ -2,11 +2,12 @@
 using Engine.Models;
 using Engine.Services;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 
 namespace Engine.ViewModels
 {
-    public class GameSession : BaseNotificationClass
+    public class GameSession : BaseNotificationClass, IDisposable
     {
         private readonly MessageBroker _messageBroker = MessageBroker.GetInstance();
 
@@ -27,19 +28,12 @@ namespace Engine.ViewModels
             get => _currentPlayer;
             private set
             {
-                if (_currentPlayer != null)
-                {
-                    _currentPlayer.OnKilled -= OnPlayerKilled;
-                    _currentPlayer.OnLeveledUp -= OnPlayerLeveledUp;
-                }
+                UnsubscribePlayer();
                 _currentPlayer = value;
-                if (_currentPlayer != null)
-                {
-                    _currentPlayer.OnKilled += OnPlayerKilled;
-                    _currentPlayer.OnLeveledUp += OnPlayerLeveledUp;
-                }
+                SubscribePlayer();
             }
         }
+
         public Location CurrentLocation
         {
             get => _currentLocation;
@@ -65,17 +59,9 @@ namespace Engine.ViewModels
             get => _currentMonster;
             private set
             {
-                if (_currentBattle != null)
-                {
-                    _currentBattle.OnCombatVictory -= OnCurrentMonsterKilled;
-                    _currentBattle.Dispose();
-                }
+                UnSubscribeBattle();
                 _currentMonster = value;
-                if (_currentMonster != null)
-                {
-                    _currentBattle = new Battle(CurrentPlayer, CurrentMonster);
-                    _currentBattle.OnCombatVictory += OnCurrentMonsterKilled;
-                }
+                SubscribeBattle();
 
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasMonster));
@@ -161,6 +147,12 @@ namespace Engine.ViewModels
             {
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate);
             }
+        }
+
+        public void Dispose()
+        {
+            UnsubscribePlayer();
+            UnSubscribeBattle();
         }
 
         #region Private Functions
@@ -259,6 +251,39 @@ namespace Engine.ViewModels
                 {
                     RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.ItemName(itemQuantity.ItemId)}");
                 }
+            }
+        }
+
+        private void SubscribePlayer()
+        {
+            if (_currentPlayer != null)
+            {
+                _currentPlayer.OnKilled += OnPlayerKilled;
+                _currentPlayer.OnLeveledUp += OnPlayerLeveledUp;
+            }
+        }
+        private void UnsubscribePlayer()
+        {
+            if (_currentPlayer != null)
+            {
+                _currentPlayer.OnKilled -= OnPlayerKilled;
+                _currentPlayer.OnLeveledUp -= OnPlayerLeveledUp;
+            }
+        }
+        private void SubscribeBattle()
+        {
+            if (_currentMonster != null)
+            {
+                _currentBattle = new Battle(CurrentPlayer, CurrentMonster);
+                _currentBattle.OnCombatVictory += OnCurrentMonsterKilled;
+            }
+        }
+        private void UnSubscribeBattle()
+        {
+            if (_currentBattle != null)
+            {
+                _currentBattle.OnCombatVictory -= OnCurrentMonsterKilled;
+                _currentBattle.Dispose();
             }
         }
 
