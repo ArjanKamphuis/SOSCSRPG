@@ -60,6 +60,7 @@ namespace Engine.ViewModels
             private set
             {
                 UnSubscribeBattle();
+                _currentBattle = null;
                 _currentMonster = value;
                 SubscribeBattle();
 
@@ -218,14 +219,22 @@ namespace Engine.ViewModels
 
         public void AttackCurrentMonster()
         {
-            _currentBattle.AttackOpponent();
+            _currentBattle?.AttackOpponent();
         }
 
         public void UseCurrentConsumable()
         {
             if (CurrentPlayer.CurrentConsumable != null)
             {
+                if (_currentBattle == null)
+                {
+                    CurrentPlayer.OnActionPerformed += OnConsumableActionPerformed;
+                }
                 CurrentPlayer.UseCurrentConsumable();
+                if (_currentBattle == null)
+                {
+                    CurrentPlayer.OnActionPerformed -= OnConsumableActionPerformed;
+                }
             }
         }
 
@@ -304,6 +313,11 @@ namespace Engine.ViewModels
         private void OnCurrentMonsterKilled(object sender, System.EventArgs e)
         {
             CurrentMonster = CurrentLocation.GetMonster();
+        }
+
+        private void OnConsumableActionPerformed(object sender, string message)
+        {
+            RaiseMessage(message);
         }
 
         private void RaiseMessage(string message)
