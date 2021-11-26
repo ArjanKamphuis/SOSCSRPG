@@ -13,8 +13,8 @@ namespace Engine.Models
         private string _characterClass;
         private int _experiencePoints;
 
-        private readonly ObservableCollection<QuestStatus> _quests = new ObservableCollection<QuestStatus>();
-        private readonly ObservableCollection<Recipe> _recipes = new ObservableCollection<Recipe>();
+        private readonly ObservableCollection<QuestStatus> _quests = new();
+        private readonly ObservableCollection<Recipe> _recipes = new();
 
         public string CharacterClass
         {

@@ -2,7 +2,9 @@
 using Engine.Models;
 using Engine.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Engine.ViewModels
@@ -13,13 +15,24 @@ namespace Engine.ViewModels
 
         #region Properties
 
+        private GameDetails _gameDetails;
+
         private Player _currentPlayer;
         private Location _currentLocation;
         private Monster _currentMonster;
         private Trader _currentTrader;
         private Battle _currentBattle;
 
-        public string Version { get; } = "0.1.000";
+        [JsonIgnore]
+        public GameDetails GameDetails
+        {
+            get => _gameDetails;
+            set
+            {
+                _gameDetails = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonIgnore]
         public World CurrentWorld { get; }
@@ -98,6 +111,8 @@ namespace Engine.ViewModels
 
         public GameSession()
         {
+            PopulateGameDetails();
+
             CurrentWorld = WorldFactory.CreateWorld();
             CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, DiceService.Instance.Roll(6, 3).Value, 100000);
 
@@ -116,6 +131,8 @@ namespace Engine.ViewModels
         }
         public GameSession(Player player, int xCoordinate, int yCoordinate)
         {
+            PopulateGameDetails();
+
             CurrentWorld = WorldFactory.CreateWorld();
             CurrentPlayer = player;
             CurrentLocation = CurrentWorld.LocationAt(xCoordinate, yCoordinate);
@@ -158,6 +175,16 @@ namespace Engine.ViewModels
         }
 
         #region Private Functions
+
+        private void PopulateGameDetails()
+        {
+            JObject gameDetails = JObject.Parse(File.ReadAllText(".\\GameData\\GameDetails.json"));
+            GameDetails = new(gameDetails["Name"].ToString(), gameDetails["Version"].ToString());
+            foreach (JToken token in gameDetails["PlayerAttributes"])
+            {
+                GameDetails.PlayerAttributes.Add(new(token["Key"].ToString(), token["DisplayName"].ToString(), token["DiceNotation"].ToString()));
+            }
+        }
 
         private void GivePlayerQuestsAtLocation()
         {
