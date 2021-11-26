@@ -99,7 +99,7 @@ namespace Engine.ViewModels
         public GameSession()
         {
             CurrentWorld = WorldFactory.CreateWorld();
-            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, RandomNumberGenerator.NumberBetween(3, 18), 100000);
+            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, DiceService.Instance.Roll(6, 3).Value, 100000);
 
             if (!CurrentPlayer.Inventory.Weapons.Any())
             {

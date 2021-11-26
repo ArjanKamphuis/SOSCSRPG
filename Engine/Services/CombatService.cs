@@ -15,10 +15,10 @@ namespace Engine.Services
             int playerDexterity = player.Dexterity * player.Dexterity;
             int opponentDexterity = opponent.Dexterity * opponent.Dexterity;
             decimal dexterityOffset = (playerDexterity - opponentDexterity) / 10m;
-            int randomOffset = RandomNumberGenerator.NumberBetween(-10, 10);
+            int randomOffset = DiceService.Instance.Roll(20).Value - 10;
             decimal totalOffset = dexterityOffset + randomOffset;
 
-            return RandomNumberGenerator.NumberBetween(0, 100) <= 50 + totalOffset ? Combatant.Player : Combatant.Opponent;
+            return DiceService.Instance.Roll(100).Value <= 50 + totalOffset ? Combatant.Player : Combatant.Opponent;
         }
 
         public static bool AttackSucceeded(LivingEntity attacker, LivingEntity target)
@@ -26,10 +26,10 @@ namespace Engine.Services
             int attackerDexterity = attacker.Dexterity * attacker.Dexterity;
             int targetDexterity = target.Dexterity * target.Dexterity;
             decimal dexterityOffset = (attackerDexterity - targetDexterity) / 10m;
-            int randomOffset = RandomNumberGenerator.NumberBetween(-10, 10);
+            int randomOffset = DiceService.Instance.Roll(20).Value - 10;
             decimal totalOffset = dexterityOffset + randomOffset;
 
-            return RandomNumberGenerator.NumberBetween(0, 100) <= 50 + totalOffset;
+            return DiceService.Instance.Roll(100).Value <= 50 + totalOffset;
         }
     }
 }

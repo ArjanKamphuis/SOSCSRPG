@@ -1,4 +1,5 @@
 ﻿using Engine.Factories;
+using Engine.Services;
 using System.Collections.Generic;
 
 namespace Engine.Models
@@ -32,7 +33,7 @@ namespace Engine.Models
             foreach (ItemPercentage itemPercentage in _lootTable)
             {
                 newMonster.AddItemToLootTable(itemPercentage.Id, itemPercentage.Percentage);
-                if (RandomNumberGenerator.NumberBetween(1, 100) <= itemPercentage.Percentage)
+                if (DiceService.Instance.Roll(100).Value <= itemPercentage.Percentage)
                 {
                     newMonster.AddItemToInventory(ItemFactory.CreateGameItem(itemPercentage.Id));
                 }
