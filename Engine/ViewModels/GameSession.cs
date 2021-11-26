@@ -178,12 +178,7 @@ namespace Engine.ViewModels
 
         private void PopulateGameDetails()
         {
-            JObject gameDetails = JObject.Parse(File.ReadAllText(".\\GameData\\GameDetails.json"));
-            GameDetails = new(gameDetails["Name"].ToString(), gameDetails["Version"].ToString());
-            foreach (JToken token in gameDetails["PlayerAttributes"])
-            {
-                GameDetails.PlayerAttributes.Add(new(token["Key"].ToString(), token["DisplayName"].ToString(), token["DiceNotation"].ToString()));
-            }
+            GameDetails = GameDetailsService.ReadGameDetails();
         }
 
         private void GivePlayerQuestsAtLocation()

@@ -4,13 +4,16 @@ namespace Engine.Models
 {
     public class GameDetails
     {
-        public string Name { get; }
+        public string Title { get; }
+        public string SubTitle { get; }
         public string Version { get; }
         public List<PlayerAttribute> PlayerAttributes { get; } = new();
+        public List<Race> Races { get; } = new();
 
-        public GameDetails(string name, string version)
+        public GameDetails(string title, string subTitle, string version)
         {
-            Name = name;
+            Title = title;
+            SubTitle = subTitle;
             Version = version;
         }
     }
