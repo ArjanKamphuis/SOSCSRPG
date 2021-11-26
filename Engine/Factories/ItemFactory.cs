@@ -12,13 +12,13 @@ namespace Engine.Factories
     {
         private const string GAME_DATA_FILENAME = ".\\GameData\\GameItems.xml";
 
-        private static readonly List<GameItem> _standardGameItems = new List<GameItem>();
+        private static readonly List<GameItem> _standardGameItems = new();
 
         static ItemFactory()
         {
             if (File.Exists(GAME_DATA_FILENAME))
             {
-                XmlDocument data = new XmlDocument();
+                XmlDocument data = new();
                 data.LoadXml(File.ReadAllText(GAME_DATA_FILENAME));
 
                 LoadItemsFromNodes(data.SelectNodes("/GameItems/Weapons/Weapon"));
@@ -51,7 +51,7 @@ namespace Engine.Factories
             foreach (XmlNode node in nodes)
             {
                 GameItem.ItemCategory itemCategory = DetermineItemCategory(node.Name);
-                GameItem gameItem = new GameItem(itemCategory, node.AttributeAsInt("Id"), node.AttributeAsString("Name"), node.AttributeAsInt("Price"), itemCategory == GameItem.ItemCategory.Weapon);
+                GameItem gameItem = new(itemCategory, node.AttributeAsInt("Id"), node.AttributeAsString("Name"), node.AttributeAsInt("Price"), itemCategory == GameItem.ItemCategory.Weapon);
 
                 if (itemCategory == GameItem.ItemCategory.Weapon)
                 {

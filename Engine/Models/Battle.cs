@@ -46,6 +46,7 @@ namespace Engine.Models
         public void Dispose()
         {
             UnsubscribeMembers();
+            GC.SuppressFinalize(this);
         }
 
         private void SubscribeMembers()

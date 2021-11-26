@@ -154,6 +154,7 @@ namespace Engine.ViewModels
         {
             UnsubscribePlayer();
             UnSubscribeBattle();
+            GC.SuppressFinalize(this);
         }
 
         #region Private Functions

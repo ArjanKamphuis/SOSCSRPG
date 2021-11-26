@@ -6,7 +6,7 @@ namespace Engine.Models
 {
     public class Monster : LivingEntity
     {
-        private readonly List<ItemPercentage> _lootTable = new List<ItemPercentage>();
+        private readonly List<ItemPercentage> _lootTable = new();
 
         public int Id { get; }
         public string ImageName { get; }
@@ -29,7 +29,7 @@ namespace Engine.Models
 
         public Monster GetNewInstance()
         {
-            Monster newMonster = new Monster(Id, Name, ImageName, MaximumHitPoints, Dexterity, CurrentWeapon, RewardExperiencePoints, Gold);
+            Monster newMonster = new(Id, Name, ImageName, MaximumHitPoints, Dexterity, CurrentWeapon, RewardExperiencePoints, Gold);
             foreach (ItemPercentage itemPercentage in _lootTable)
             {
                 newMonster.AddItemToLootTable(itemPercentage.Id, itemPercentage.Percentage);

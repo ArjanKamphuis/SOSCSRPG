@@ -15,7 +15,7 @@ namespace TestEngine.Actions
         public void Test_Constructor_GoodParameters()
         {
             GameItem pointyStick = ItemFactory.CreateGameItem(1001);
-            AttackWithWeapon attackWithWeapon = new AttackWithWeapon(pointyStick, "1d5");
+            AttackWithWeapon attackWithWeapon = new(pointyStick, "1d5");
 
             Assert.IsNotNull(attackWithWeapon);
         }

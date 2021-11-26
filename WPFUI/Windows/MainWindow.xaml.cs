@@ -18,7 +18,7 @@ namespace WPFUI.Windows
         private const string SAVE_GAME_FILE_EXTENSION = "soscsrpg";
 
         private readonly MessageBroker _messageBroker = MessageBroker.GetInstance();
-        private readonly Dictionary<Key, Action> _userInputActions = new Dictionary<Key, Action>();
+        private readonly Dictionary<Key, Action> _userInputActions = new();
 
         private GameSession _gameSession;
 
@@ -60,7 +60,7 @@ namespace WPFUI.Windows
         {
             if (_gameSession.HasTrader)
             {
-                TradeScreen tradeScreen = new TradeScreen() { Owner = this, DataContext = _gameSession };
+                TradeScreen tradeScreen = new() { Owner = this, DataContext = _gameSession };
                 _ = tradeScreen.ShowDialog();
             }
         }
@@ -119,7 +119,7 @@ namespace WPFUI.Windows
 
         private void SaveGame()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            SaveFileDialog saveFileDialog = new()
             {
                 InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 Filter = $"Saved games (*.{SAVE_GAME_FILE_EXTENSION})|*.{SAVE_GAME_FILE_EXTENSION}"
@@ -139,8 +139,8 @@ namespace WPFUI.Windows
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            YesNoWindow message = new YesNoWindow("Save Game", "Do you want to save your game?") { Owner = GetWindow(this) };
-            message.ShowDialog();
+            YesNoWindow message = new("Save Game", "Do you want to save your game?") { Owner = GetWindow(this) };
+            _ = message.ShowDialog();
             if (message.ClickedYes)
             {
                 SaveGame();
@@ -154,7 +154,7 @@ namespace WPFUI.Windows
 
         private void OnClick_LoadGame(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            OpenFileDialog openFileDialog = new()
             {
                 InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 Filter = $"Saved games (*.{SAVE_GAME_FILE_EXTENSION})|*.{SAVE_GAME_FILE_EXTENSION}"

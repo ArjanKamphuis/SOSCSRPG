@@ -8,8 +8,8 @@ namespace Engine.Models
 {
     public class Location
     {
-        private readonly List<Quest> _questsAvailableHere = new List<Quest>();
-        private readonly List<MonsterEncounter> _monstersHere = new List<MonsterEncounter>();
+        private readonly List<Quest> _questsAvailableHere = new();
+        private readonly List<MonsterEncounter> _monstersHere = new();
 
         public int XCoordinate { get; }
         public int YCoordinate { get; }
