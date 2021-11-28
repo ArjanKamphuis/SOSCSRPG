@@ -24,10 +24,20 @@ namespace WPFUI
         private GameSession _gameSession;
 
         public MainWindow(Player player, int xLocation = 0, int yLocation = 0)
+            : this(new GameSession(player, xLocation, yLocation))
+        {
+        }
+
+        public MainWindow(GameSession gameSession)
+            : this()
+        {
+            SetActiveGameSessionTo(gameSession);
+        }
+
+        private MainWindow()
         {
             InitializeComponent();
             InitializeUserInputActions();
-            SetActiveGameSessionTo(new GameSession(player, xLocation, yLocation));
         }
 
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
@@ -142,6 +152,13 @@ namespace WPFUI
             }
         }
 
+        private void ClearGameSessionDataAndClose()
+        {
+            _gameSession.Dispose();
+            _gameSession = null;
+            Close();
+        }
+
         private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
         {
             gameMessages.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
@@ -157,7 +174,7 @@ namespace WPFUI
         {
             Startup startup = new();
             startup.Show();
-            Close();
+            ClearGameSessionDataAndClose();
         }
 
         private void OnClick_SaveGame(object sender, RoutedEventArgs e)
@@ -167,7 +184,7 @@ namespace WPFUI
 
         private void OnClick_Exit(object sender, RoutedEventArgs e)
         {
-            Close();
+            ClearGameSessionDataAndClose();
         }
     }
 }

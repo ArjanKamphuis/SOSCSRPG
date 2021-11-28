@@ -34,8 +34,7 @@ namespace WPFUI
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                GameSession gameSession = SaveGameService.LoadLastSaveOrCreateNew(openFileDialog.FileName);
-                MainWindow mainWindow = new(gameSession.CurrentPlayer, gameSession.CurrentLocation.XCoordinate, gameSession.CurrentLocation.YCoordinate);
+                MainWindow mainWindow = new(SaveGameService.LoadLastSaveOrCreateNew(openFileDialog.FileName));
                 mainWindow.Show();
                 Close();
             }
