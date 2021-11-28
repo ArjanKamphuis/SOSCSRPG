@@ -12,8 +12,8 @@ namespace Engine.Models
         public string ImageName { get; }
         public int RewardExperiencePoints { get; }
 
-        public Monster(int id, string name, string imageName, int maximumHitPoints, int dexterity, GameItem currentWeapon, int rewardExperiencePoints, int gold)
-            : base(name, maximumHitPoints, maximumHitPoints, dexterity, gold)
+        public Monster(int id, string name, string imageName, int maximumHitPoints, IEnumerable<PlayerAttribute> attributes, GameItem currentWeapon, int rewardExperiencePoints, int gold)
+            : base(name, maximumHitPoints, maximumHitPoints, attributes, gold)
         {
             Id = id;
             ImageName = imageName;
@@ -29,7 +29,7 @@ namespace Engine.Models
 
         public Monster GetNewInstance()
         {
-            Monster newMonster = new(Id, Name, ImageName, MaximumHitPoints, Dexterity, CurrentWeapon, RewardExperiencePoints, Gold);
+            Monster newMonster = new(Id, Name, ImageName, MaximumHitPoints, Attributes, CurrentWeapon, RewardExperiencePoints, Gold);
             foreach (ItemPercentage itemPercentage in _lootTable)
             {
                 newMonster.AddItemToLootTable(itemPercentage.Id, itemPercentage.Percentage);

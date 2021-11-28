@@ -23,17 +23,11 @@ namespace WPFUI
 
         private GameSession _gameSession;
 
-        public MainWindow()
+        public MainWindow(Player player)
         {
             InitializeComponent();
             InitializeUserInputActions();
-            SetActiveGameSessionTo(new GameSession());
-        }
-
-        public MainWindow(Player player)
-            : this()
-        {
-            _gameSession.CurrentPlayer = player;
+            SetActiveGameSessionTo(new GameSession(player, 0, 0));
         }
 
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
@@ -156,7 +150,7 @@ namespace WPFUI
 
         private void OnClick_StartNewGame(object sender, RoutedEventArgs e)
         {
-            SetActiveGameSessionTo(new GameSession());
+            //SetActiveGameSessionTo(new GameSession());
         }
 
         private void OnClick_LoadGame(object sender, RoutedEventArgs e)

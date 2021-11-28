@@ -20,7 +20,7 @@ namespace Engine.Services
         {
             if (!File.Exists(fileName))
             {
-                return new GameSession();
+                return null;
             }
 
             try
@@ -37,31 +37,32 @@ namespace Engine.Services
             catch (Exception ex)
             {
                 LoggingService.Log(ex);
-                return new GameSession();
+                return null;
             }
         }
 
         private static Player CreatePlayer(JObject data)
         {
-            string fileVersion = FileVersion(data);
+            //string fileVersion = FileVersion(data);
 
-            Player player = fileVersion switch
-            {
-                "0.1.000" => new Player((string)data[nameof(GameSession.CurrentPlayer)][nameof(Player.Name)],
-                                        (string)data[nameof(GameSession.CurrentPlayer)][nameof(Player.CharacterClass)],
-                                        (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.ExperiencePoints)],
-                                        (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.MaximumHitPoints)],
-                                        (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.CurrentHitPoints)],
-                                        (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.Dexterity)],
-                                        (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.Gold)]),
-                _ => throw new InvalidDataException($"File version '{fileVersion}' not recognized"),
-            };
-            PopulatePlayerInventory(data, player);
-            PopulatePlayerQuests(data, player);
-            PopulatePlayerRecipes(data, player);
-            PopulateCurrentItems(data, player);
+            //Player player = fileVersion switch
+            //{
+            //    "0.1.000" => new Player((string)data[nameof(GameSession.CurrentPlayer)][nameof(Player.Name)],
+            //                            (string)data[nameof(GameSession.CurrentPlayer)][nameof(Player.CharacterClass)],
+            //                            (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.ExperiencePoints)],
+            //                            (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.MaximumHitPoints)],
+            //                            (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.CurrentHitPoints)],
+            //                            (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.Dexterity)],
+            //                            (int)data[nameof(GameSession.CurrentPlayer)][nameof(Player.Gold)]),
+            //    _ => throw new InvalidDataException($"File version '{fileVersion}' not recognized"),
+            //};
+            //PopulatePlayerInventory(data, player);
+            //PopulatePlayerQuests(data, player);
+            //PopulatePlayerRecipes(data, player);
+            //PopulateCurrentItems(data, player);
 
-            return player;
+            //return player;
+            return null;
         }
 
         private static void PopulatePlayerInventory(JObject data, Player player)

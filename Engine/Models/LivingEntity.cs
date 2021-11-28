@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Engine.Models
 {
@@ -10,7 +11,6 @@ namespace Engine.Models
         #region Properties
 
         private string _name;
-        private int _dexterity;
         private int _currentHitPoints;
         private int _maximumHitPoints;
         private int _gold;
@@ -20,6 +20,7 @@ namespace Engine.Models
         private GameItem _currentConsumable;
 
         private Inventory _inventory;
+        private readonly ObservableCollection<PlayerAttribute> _attributes;
 
         public string Name
         {
@@ -27,15 +28,6 @@ namespace Engine.Models
             private set
             {
                 _name = value;
-                OnPropertyChanged();
-            }
-        }
-        public int Dexterity
-        {
-            get => _dexterity;
-            private set
-            {
-                _dexterity = value;
                 OnPropertyChanged();
             }
         }
@@ -118,6 +110,7 @@ namespace Engine.Models
                 OnPropertyChanged();
             }
         }
+        public ReadOnlyObservableCollection<PlayerAttribute> Attributes { get; }
 
         [JsonIgnore]
         public bool IsAlive => CurrentHitPoints > 0;
@@ -129,16 +122,17 @@ namespace Engine.Models
         public event EventHandler OnKilled;
         public event EventHandler<string> OnActionPerformed;
 
-        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, int dexterity, int gold, int level = 1)
+        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, IEnumerable<PlayerAttribute> attributes, int gold, int level = 1)
         {
             Name = name;
-            Dexterity = dexterity;
             MaximumHitPoints = maximumHitPoints;
             CurrentHitPoints = currentHitPoints;
             Gold = gold;
             Level = level;
 
-            Inventory = new Inventory();
+            Inventory = new();
+            _attributes = new(attributes);
+            Attributes = new(_attributes);
         }
 
         public void AddItemToInventory(GameItem item)

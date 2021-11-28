@@ -2,9 +2,7 @@
 using Engine.Models;
 using Engine.Services;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace Engine.ViewModels
@@ -109,26 +107,6 @@ namespace Engine.ViewModels
 
         #endregion
 
-        public GameSession()
-        {
-            PopulateGameDetails();
-
-            CurrentWorld = WorldFactory.CreateWorld();
-            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, DiceService.Instance.Roll(6, 3).Value, 100000);
-
-            if (!CurrentPlayer.Inventory.Weapons.Any())
-            {
-                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
-            }
-
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(2001));
-            CurrentPlayer.LearnRecipe(RecipeFactory.GetRecipeById(1));
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3001));
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3002));
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3003));
-
-            CurrentLocation = CurrentWorld.LocationAt(0, 0);
-        }
         public GameSession(Player player, int xCoordinate, int yCoordinate)
         {
             PopulateGameDetails();
