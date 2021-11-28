@@ -23,11 +23,11 @@ namespace WPFUI
 
         private GameSession _gameSession;
 
-        public MainWindow(Player player)
+        public MainWindow(Player player, int xLocation = 0, int yLocation = 0)
         {
             InitializeComponent();
             InitializeUserInputActions();
-            SetActiveGameSessionTo(new GameSession(player, 0, 0));
+            SetActiveGameSessionTo(new GameSession(player, xLocation, yLocation));
         }
 
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
@@ -132,13 +132,7 @@ namespace WPFUI
             }
         }
 
-        private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
-        {
-            gameMessages.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
-            gameMessages.ScrollToEnd();
-        }
-
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        private void AskToSaveGame()
         {
             YesNoWindow message = new("Save Game", "Do you want to save your game?") { Owner = GetWindow(this) };
             _ = message.ShowDialog();
@@ -148,23 +142,22 @@ namespace WPFUI
             }
         }
 
-        private void OnClick_StartNewGame(object sender, RoutedEventArgs e)
+        private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
         {
-            //SetActiveGameSessionTo(new GameSession());
+            gameMessages.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
+            gameMessages.ScrollToEnd();
         }
 
-        private void OnClick_LoadGame(object sender, RoutedEventArgs e)
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            OpenFileDialog openFileDialog = new()
-            {
-                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                Filter = $"Saved games (*.{SAVE_GAME_FILE_EXTENSION})|*.{SAVE_GAME_FILE_EXTENSION}"
-            };
+            AskToSaveGame();
+        }
 
-            if (openFileDialog.ShowDialog() == true)
-            {
-                SetActiveGameSessionTo(SaveGameService.LoadLastSaveOrCreateNew(openFileDialog.FileName));
-            }
+        private void OnClick_StartNewGame(object sender, RoutedEventArgs e)
+        {
+            Startup startup = new();
+            startup.Show();
+            Close();
         }
 
         private void OnClick_SaveGame(object sender, RoutedEventArgs e)

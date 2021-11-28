@@ -27,10 +27,8 @@
 
         <!-- Menu -->
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="AliceBlue">
-            <MenuItem Header="File"  IsEnabled="False">
-                <MenuItem Header="Start New Game" Click="OnClick_StartNewGame"/>
-                <Separator/>
-                <MenuItem Header="Load Game" Click="OnClick_LoadGame"/>
+            <MenuItem Header="File">
+                <MenuItem Header="New Game" Click="OnClick_StartNewGame"/>
                 <MenuItem Header="Save Game" Click="OnClick_SaveGame"/>
                 <Separator/>
                 <MenuItem Header="Exit" Click="OnClick_Exit"/>
