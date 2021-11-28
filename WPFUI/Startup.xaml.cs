@@ -2,7 +2,7 @@
 using Engine.Services;
 using System.Windows;
 
-namespace WPFUI.Windows
+namespace WPFUI
 {
     public partial class Startup : Window
     {

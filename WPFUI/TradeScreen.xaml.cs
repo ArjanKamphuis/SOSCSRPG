@@ -2,11 +2,8 @@
 using Engine.ViewModels;
 using System.Windows;
 
-namespace WPFUI.Windows
+namespace WPFUI
 {
-    /// <summary>
-    /// Interaction logic for TradeScreen.xaml
-    /// </summary>
     public partial class TradeScreen : Window
     {
         public GameSession Session => DataContext as GameSession;

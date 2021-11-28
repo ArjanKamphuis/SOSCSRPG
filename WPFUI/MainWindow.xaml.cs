@@ -10,8 +10,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using WPFUI.Windows;
 
-namespace WPFUI.Windows
+namespace WPFUI
 {
     public partial class MainWindow : Window
     {
@@ -27,6 +28,12 @@ namespace WPFUI.Windows
             InitializeComponent();
             InitializeUserInputActions();
             SetActiveGameSessionTo(new GameSession());
+        }
+
+        public MainWindow(Player player)
+            : this()
+        {
+            _gameSession.CurrentPlayer = player;
         }
 
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)

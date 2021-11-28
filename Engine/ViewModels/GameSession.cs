@@ -39,7 +39,7 @@ namespace Engine.ViewModels
         public Player CurrentPlayer
         {
             get => _currentPlayer;
-            private set
+            set
             {
                 UnsubscribePlayer();
                 _currentPlayer = value;
